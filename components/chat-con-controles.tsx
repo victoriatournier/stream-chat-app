@@ -6,8 +6,6 @@ import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import { normalMessages, angryMessages, happyMessages } from "@/constants/messages"
 
-
-
 export default function ChatConControles() {
   const [frequency, setFrequency] = useState(1000)
   const [activeMessages, setActiveMessages] = useState(() => normalMessages)
@@ -24,8 +22,9 @@ export default function ChatConControles() {
           <Slider
             value={[frequency]}
             onValueChange={(value) => setFrequency(value[0])}
-            min={200} max={3000} step={100}
+            min={100} max={3000} step={100}
           />
+          <p className="text-xs text-gray-300 mt-1">Frecuencia actual: {frequency/1000} s</p>
         </div>
 
         <div>
@@ -51,7 +50,6 @@ export default function ChatConControles() {
             >
               QUE LO MATEN 😠
             </Button>
-            
           </div>
         </div>
       </div>

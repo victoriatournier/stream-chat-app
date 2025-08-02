@@ -7,7 +7,6 @@ import { MoreVertical, X, Users, Heart, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { usernames } from "@/constants/usernames"
 
-// 1. La interfaz de props ahora espera un 'messageSet' (array de strings)
 interface LiveStreamChatProps {
   frequency: number;
   messageSet: string[];
@@ -24,7 +23,6 @@ const colors = [
   "#fd79a8", "#00b894", "#e17055", "#74b9ff",
 ]
 
-// 2. El componente recibe 'messageSet' en sus props
 export default function LiveStreamChat({ frequency, messageSet }: LiveStreamChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
 
@@ -32,13 +30,12 @@ export default function LiveStreamChat({ frequency, messageSet }: LiveStreamChat
     let timeout: NodeJS.Timeout
 
     const pushMessage = () => {
-      // 3. Elige un mensaje al azar del 'messageSet' que recibió por props
-      const randomMessage = messageSet[Math.floor(Math.random() * messageSet.length)];
-      
+      const randomMessage = messageSet[Math.floor(Math.random() * messageSet.length)]
+
       const newMessage: ChatMessage = {
         id: Date.now().toString(),
         username: usernames[Math.floor(Math.random() * usernames.length)],
-        message: randomMessage, // Usamos el mensaje elegido
+        message: randomMessage,
         avatar: `https://i.pravatar.cc/32?u=${Date.now()}`,
         timestamp: new Date(),
         usernameColor: colors[Math.floor(Math.random() * colors.length)],
@@ -48,17 +45,18 @@ export default function LiveStreamChat({ frequency, messageSet }: LiveStreamChat
       }
 
       setMessages((prev) => [...prev.slice(-50), newMessage])
-      timeout = setTimeout(pushMessage, frequency)
+
+      const randomInterval = frequency + Math.floor(Math.random() * (frequency * 0.5))
+      timeout = setTimeout(pushMessage, randomInterval)
     }
 
     timeout = setTimeout(pushMessage, frequency)
 
     return () => clearTimeout(timeout)
-  }, [frequency, messageSet]) 
+  }, [frequency, messageSet])
 
   return (
     <div className="w-[480px] h-[600px] bg-gray-900 text-white flex flex-col rounded-lg overflow-hidden border border-gray-700">
-      {}
       <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-2">
           <span className="font-medium text-sm">Chat en vivo</span>
