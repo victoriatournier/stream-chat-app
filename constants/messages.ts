@@ -1,13 +1,13 @@
 
 export const normalMessages = [
   "Qué buen stream!", "Saludos desde Argentina! 🇦🇷", "Me encanta este contenido",
-  "Primera vez que veo el directo, qué buena onda!", "jajajaja",
+  "Primera vez que veo el directo, qué buena onda!", "jajajaja", "jajajj",
   "Saludos desde México! 🇲🇽", "Hola a todos en el chat", "Llegando justo a tiempo",
-  "Muy bueno esto", "No puedo parar de reír", "Ufff, qué cerca",
+  "Muy bueno esto", "No puedo parar de reír", 
   "Totalmente de acuerdo", "Gracias por la buena onda", "Siempre un placer ver el directo",
   "Qué genio", "Manda saludo para Colombia! 🇨🇴", "Esto es oro puro",
   "jajajajajaja no puede ser", "Grande!", "Lo máximo",
-  "Pienso igual", "Qué locura", "F por si acaso",
+  "Pienso igual", "Qué locura", "F",
   "Buenas noches!", "El mejor streamer", "Amo esta comunidad",
   "👏👏👏", "🔥🔥🔥", "Reportándome desde España 🇪🇸",
   "No te lo puedo creer", "desde Uruguay", "saludos desde uruguay"
@@ -59,7 +59,7 @@ export const happyMessages = [
   "Aguante este programa!",
   "NO PUEDO MÁS 😂",
   "Son únicos, de verdad.",
-  "VAMOOOO TODAVÍA.",
+  "VAMOOOO",
   "Es espectacular esto.",
   "Esto es CINE 🚬",
   "El mejor dúo, sin dudas.",
@@ -68,10 +68,11 @@ export const happyMessages = [
   "Qué nivel, por favor.",
   "No me canso de verlos.",
   "El programa del año.",
-  "BOOM! 💥",
+  "💥",
   "JAJAJA son increíbles.",
   "Daleeee con todo.",
   "🔥🔥🔥",
+  "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥",
   "💖",
   "💖💖💖💖💖💖💖💖💖💖💖"
 
