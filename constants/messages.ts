@@ -10,7 +10,8 @@ export const normalMessages = [
   "Pienso igual", "Qué locura", "F",
   "Buenas noches!", "El mejor streamer", "Amo esta comunidad",
   "👏👏👏", "🔥🔥🔥", "Reportándome desde España 🇪🇸",
-  "No te lo puedo creer", "desde Uruguay", "saludos desde uruguay", "holaaaaa",
+  "No te lo puedo creer", "desde Uruguay", "saludos desde uruguay", "holaaaaa","vamo ariba peñarol","💛🖤",
+  "ya quiero el próximo directo", "esto es increíble", "que buen el programa","hola", "💖", "💛💛", 
 ]
 export const angryMessages = [
   "QUE LO MATEN.",
@@ -62,6 +63,7 @@ export const happyMessages = [
   "NO PUEDO MÁS 😂",
   "Son únicos, de verdad",
   "VAMOOOO",
+  "😂😂😂😂😂",
   "Es espectacular esto",
   "Esto es CINE 🚬",
   "CINE PURO 🚬🚬🚬🚬🚬🚬🚬🚬",
@@ -72,6 +74,8 @@ export const happyMessages = [
   "No me canso de verlos.",
   "El programa del año",
   "💥",
+  "​​tuuuki",
+  "QUEEEE",
   "JAJAJA son increíbles.",
   "Daleeee con todo",
   "🔥🔥🔥",
@@ -84,6 +88,7 @@ export const happyMessages = [
   "gracias por tanto contenido",
   "esto es oro puro loco",
   "vamo arriba cheee 🔥🔥",
-
+  "espectacularr",
+  "DIOOSSSS",
 
 ]
