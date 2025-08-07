@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { MoreVertical, X, Users, Heart, ChevronDown } from "lucide-react"
@@ -10,8 +10,9 @@ import { usernames } from "@/constants/usernames"
 interface LiveStreamChatProps {
   frequency: number
   messageSet: string[]
-  hearts: number[]       
+  hearts: number[]
   onHeartClick?: () => void
+  manualMessages?: string[] 
 }
 
 interface ChatMessage {
@@ -33,7 +34,7 @@ const colors = [
 
 function FloatingHeart() {
   const [visible, setVisible] = useState(true)
-  const animationDuration = 1000 // 1 segundo
+  const animationDuration = 1000
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(false), animationDuration)
@@ -63,14 +64,22 @@ export default function LiveStreamChat({
   messageSet,
   hearts,
   onHeartClick,
+  manualMessages = [], 
 }: LiveStreamChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
+  const messageQueue = useRef<string[]>([...messageSet])
+  const prevManualLength = useRef(0) 
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
     const pushMessage = () => {
-      const randomMessage = messageSet[Math.floor(Math.random() * messageSet.length)]
+      if (messageQueue.current.length === 0) {
+        messageQueue.current = [...messageSet]
+      }
+
+      const randomIndex = Math.floor(Math.random() * messageQueue.current.length)
+      const randomMessage = messageQueue.current.splice(randomIndex, 1)[0]
 
       const newMessage: ChatMessage = {
         id: Date.now().toString(),
@@ -86,7 +95,9 @@ export default function LiveStreamChat({
 
       setMessages((prev) => [...prev.slice(-50), newMessage])
 
-      const randomInterval = frequency + Math.floor(Math.random() * (frequency * 0.5))
+      const variationFactor = Math.random() * 1.7 + 0.3
+      const randomInterval = Math.floor(frequency * variationFactor)
+
       timeout = setTimeout(pushMessage, randomInterval)
     }
 
@@ -94,6 +105,27 @@ export default function LiveStreamChat({
 
     return () => clearTimeout(timeout)
   }, [frequency, messageSet])
+
+  useEffect(() => {
+    if (manualMessages.length > prevManualLength.current) {
+      const newMessages = manualMessages.slice(prevManualLength.current)
+      prevManualLength.current = manualMessages.length
+
+      const newChatMessages: ChatMessage[] = newMessages.map((text) => ({
+        id: Date.now().toString() + Math.random(),
+        username: usernames[Math.floor(Math.random() * usernames.length)],
+        message: text,
+        avatar: `https://i.pravatar.cc/32?u=${Date.now() + Math.random()}`,
+        timestamp: new Date(),
+        usernameColor: colors[Math.floor(Math.random() * colors.length)],
+        isSubscriber: Math.random() > 0.8,
+        isMember: Math.random() > 0.9,
+        isModerator: Math.random() > 0.95,
+      }))
+
+      setMessages((prev) => [...prev.slice(-50), ...newChatMessages])
+    }
+  }, [manualMessages])
 
   const handleHeartClick = () => {
     if (onHeartClick) onHeartClick()
@@ -171,7 +203,6 @@ export default function LiveStreamChat({
           {hearts.map((id) => (
             <FloatingHeart key={id} />
           ))}
-
           <Button variant="ghost" size="sm" className="p-1 h-auto">
             <span className="text-[10px] bg-gray-700 px-1 py-0.5 rounded">$</span>
           </Button>
