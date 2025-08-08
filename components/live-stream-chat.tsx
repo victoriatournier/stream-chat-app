@@ -7,12 +7,17 @@ import { MoreVertical, X, Users, Heart, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { usernames } from "@/constants/usernames"
 
+interface ManualMessage {
+  username: string
+  message: string
+}
+
 interface LiveStreamChatProps {
   frequency: number
   messageSet: string[]
   hearts: number[]
   onHeartClick?: () => void
-  manualMessages?: string[] 
+  manualMessages?: ManualMessage[]
 }
 
 interface ChatMessage {
@@ -64,11 +69,11 @@ export default function LiveStreamChat({
   messageSet,
   hearts,
   onHeartClick,
-  manualMessages = [], 
+  manualMessages = [],
 }: LiveStreamChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const messageQueue = useRef<string[]>([...messageSet])
-  const prevManualLength = useRef(0) 
+  const prevManualLength = useRef(0)
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
@@ -85,7 +90,7 @@ export default function LiveStreamChat({
         id: Date.now().toString(),
         username: usernames[Math.floor(Math.random() * usernames.length)],
         message: randomMessage,
-        avatar: `https://i.pravatar.cc/32?u=${Date.now()}`,
+        avatar: `https://i.pravatar.cc/64?u=${Date.now()}`,
         timestamp: new Date(),
         usernameColor: colors[Math.floor(Math.random() * colors.length)],
         isSubscriber: Math.random() > 0.8,
@@ -95,7 +100,10 @@ export default function LiveStreamChat({
 
       setMessages((prev) => [...prev.slice(-50), newMessage])
 
-      const variationFactor = Math.random() * 1.7 + 0.3
+      const burst = Math.random() < 0.3
+      const variationFactor = burst
+        ? Math.random() * 0.5 + 0.1
+        : Math.random() * 2 + 1
       const randomInterval = Math.floor(frequency * variationFactor)
 
       timeout = setTimeout(pushMessage, randomInterval)
@@ -111,11 +119,11 @@ export default function LiveStreamChat({
       const newMessages = manualMessages.slice(prevManualLength.current)
       prevManualLength.current = manualMessages.length
 
-      const newChatMessages: ChatMessage[] = newMessages.map((text) => ({
+      const newChatMessages: ChatMessage[] = newMessages.map(({ username, message }) => ({
         id: Date.now().toString() + Math.random(),
-        username: usernames[Math.floor(Math.random() * usernames.length)],
-        message: text,
-        avatar: `https://i.pravatar.cc/32?u=${Date.now() + Math.random()}`,
+        username,
+        message,
+        avatar: `https://i.pravatar.cc/64?u=${Date.now() + Math.random()}`,
         timestamp: new Date(),
         usernameColor: colors[Math.floor(Math.random() * colors.length)],
         isSubscriber: Math.random() > 0.8,
@@ -132,39 +140,39 @@ export default function LiveStreamChat({
   }
 
   return (
-    <div className="w-[480px] h-[600px] bg-gray-900 text-white flex flex-col rounded-lg overflow-hidden border border-gray-700">
-      <div className="flex items-center justify-between p-2 bg-gray-800 border-b border-gray-700">
+    <div className="w-[500px] h-[700px] bg-gray-900 text-white flex flex-col rounded-lg overflow-hidden border border-gray-700">
+      <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-xs">Chat en vivo</span>
-          <ChevronDown className="w-3 h-3 text-gray-400" />
+          <span className="font-medium text-sm">Chat en vivo</span>
+          <ChevronDown className="w-4 h-4 text-gray-400" />
         </div>
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="sm" className="p-1 h-auto">
-            <MoreVertical className="w-3 h-3 text-gray-400" />
+            <MoreVertical className="w-4 h-4 text-gray-400" />
           </Button>
           <Button variant="ghost" size="sm" className="p-1 h-auto">
-            <X className="w-3 h-3 text-gray-400" />
+            <X className="w-4 h-4 text-gray-400" />
           </Button>
         </div>
       </div>
 
-      <div className="flex-1 p-1 flex flex-col justify-end overflow-hidden">
-        <div className="space-y-1">
+      <div className="flex-1 p-2 flex flex-col justify-end overflow-hidden">
+        <div className="space-y-2">
           {messages.slice(-20).map((message) => (
             <div
               key={message.id}
-              className="flex items-start gap-1 group hover:bg-gray-800/30 p-0.5 rounded"
+              className="flex items-start gap-2 group hover:bg-gray-800/30 p-1 rounded"
             >
-              <Avatar className="w-5 h-5 flex-shrink-0">
+              <Avatar className="w-8 h-8 flex-shrink-0">
                 <AvatarImage src={message.avatar || "/placeholder.svg"} />
-                <AvatarFallback className="text-[10px] bg-gray-600">
+                <AvatarFallback className="text-xs bg-gray-600">
                   {message.username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-0.5 flex-wrap">
+              <div className="flex-1 min-w-0 max-w-full">
+                <div className="flex items-center gap-1 flex-wrap">
                   <span
-                    className="font-semibold text-xs truncate"
+                    className="font-semibold text-sm"
                     style={{ color: message.usernameColor }}
                   >
                     {message.username}
@@ -185,7 +193,7 @@ export default function LiveStreamChat({
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-gray-100 break-words leading-tight mt-0.5">
+                <p className="text-base text-gray-100 break-words leading-snug mt-0.5 max-w-full">
                   {message.message}
                 </p>
               </div>
@@ -195,8 +203,8 @@ export default function LiveStreamChat({
       </div>
 
       <div className="flex items-center justify-between p-2 bg-gray-800 border-t border-gray-700">
-        <div className="flex items-center gap-1 text-[10px] text-gray-400">
-          <Users className="w-3 h-3" />
+        <div className="flex items-center gap-1 text-xs text-gray-400">
+          <Users className="w-4 h-4" />
           <span>Modo Solo suscriptores</span>
         </div>
         <div className="relative flex items-center gap-1">
@@ -204,7 +212,7 @@ export default function LiveStreamChat({
             <FloatingHeart key={id} />
           ))}
           <Button variant="ghost" size="sm" className="p-1 h-auto">
-            <span className="text-[10px] bg-gray-700 px-1 py-0.5 rounded">$</span>
+            <span className="text-xs bg-gray-700 px-1 py-0.5 rounded">$</span>
           </Button>
           <Button
             variant="ghost"
@@ -212,7 +220,7 @@ export default function LiveStreamChat({
             className="p-1 h-auto relative"
             onClick={handleHeartClick}
           >
-            <Heart className="w-3 h-3 text-gray-400" />
+            <Heart className="w-4 h-4 text-gray-400" />
           </Button>
         </div>
       </div>
