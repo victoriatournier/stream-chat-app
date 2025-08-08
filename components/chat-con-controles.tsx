@@ -91,7 +91,7 @@ export default function ChatConControles() {
             <Slider
               value={[heartFrequency]}
               onValueChange={(value) => setHeartFrequency(value[0])}
-              min={0} max={2000} step={200}
+              min={0} max={5000} step={200}
             />
             <div className="text-xs text-gray-400 text-center mt-1">
               {heartFrequency === 0 ? "Desactivado" : `${heartFrequency / 1000} s`}
